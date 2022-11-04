@@ -7,7 +7,8 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using HTTPResponse.Contollers;
+using HTTPResponse.Controllers;
+using HTTPResponse.Attributes;
 
 namespace HTTPResponse
 {
@@ -47,12 +48,9 @@ namespace HTTPResponse
                 Console.WriteLine("Уже запущен");
                 return;
             }
-            Console.WriteLine("Запуск сервера...");
+            Console.WriteLine ("Запуск сервера...");
 
             new HttpServer();
-
-            listener = new HttpListener();
-
 
             listener.Start();
             
@@ -64,59 +62,65 @@ namespace HTTPResponse
         {
             while (listener.IsListening)
             {
+                try
+                {
                     var context = await listener.GetContextAsync();
+
+                    if (MethodHandler(context)) continue;
+
                     StaticFiles(context);
-                
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    continue;
+                }
             }
         }
         private void StaticFiles(HttpListenerContext context)
         {
-            var response = context.Response;
+                HttpListenerRequest request = context.Request;
+                HttpListenerResponse response = context.Response;
+                var path = Directory.GetCurrentDirectory();
+                byte[] buffer;
 
-            var path = Directory.GetCurrentDirectory();
-            byte[] buffer;
+                if (Directory.Exists(path))
 
-            if (Directory.Exists(path))
-
-            {
-                buffer = FileFinder.GetFile(context.Request.RawUrl.Replace("%20", " "), "index.html", _path);
-
-                response.Headers.Set("Content-Type", "text/css");
-                response.Headers.Add("Content-Type", "text/html");
-
-
-                if (buffer == null)
                 {
-                    response.Headers.Set("Content-Type", "text/plain");
-                    response.StatusCode = (int)HttpStatusCode.NotFound;
-                    string err = "404 - Not Found";
-                    buffer = Encoding.UTF8.GetBytes(err);
+                    buffer = FileFinder.GetFile(context.Request.RawUrl.Replace("%20", " "), "index.html", _path);
+
+                    response.Headers.Set("Content-Type", "text/css");
+                    response.Headers.Add("Content-Type", "text/html");
+
+
+                    if (buffer == null)
+                    {
+                        response.Headers.Set("Content-Type", "text/plain");
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        string err = "404 - Not Found";
+                        buffer = Encoding.UTF8.GetBytes(err);
+                    }
                 }
-            }
-            else
-            {
+                else
+                {
 
-                string err = $"{path} is not found";
-                buffer = Encoding.UTF8.GetBytes(err);
+                    string err = $"{path} is not found";
+                    buffer = Encoding.UTF8.GetBytes(err);
 
-            }
+                }
 
-            output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
-            output.Close();
-            context.Response.Close();
-            
+                output = response.OutputStream;
+                output.Write(buffer, 0, buffer.Length);
+                output.Close();
+                context.Response.Close();
         }
         public void Stop()
         {
             if (Status == ServerStatus.Stop) return;
             // останавливаем прослушивание подключений
+
             listener.Stop();
-            listener.Abort();
-            listener.Close();
-            
-            listener = null;
-            
+
             Status = ServerStatus.Stop;
             Console.WriteLine("Обработка подключений завершена");
         }
@@ -124,23 +128,16 @@ namespace HTTPResponse
         {
             Stop();
         }
-        private bool MethodHandler(HttpListenerContext _httpContext)
+        private bool MethodHandler(HttpListenerContext context)
         {
             // объект запроса
-            HttpListenerRequest request = _httpContext.Request;
+            HttpListenerRequest request = context.Request;
+            
 
             // объект ответа
-            HttpListenerResponse response = _httpContext.Response;
+            HttpListenerResponse response = context.Response;
 
-            if (_httpContext.Request.Url.Segments.Length < 2) return false;
-
-            string controllerName = _httpContext.Request.Url.Segments[1].Replace("/", "");
-
-            string[] strParams = _httpContext.Request.Url
-                                    .Segments
-                                    .Skip(2)
-                                    .Select(s => s.Replace("/", ""))
-                                    .ToArray();
+            string controllerName = context.Request.Url.Segments[1].Replace("/", "");
 
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -150,15 +147,31 @@ namespace HTTPResponse
 
             var test = typeof(HttpController).Name;
             var method = controller.GetMethods().Where(t => t.GetCustomAttributes(true)
-                                                              .Any(attr => attr.GetType().Name == $"Http{_httpContext.Request.HttpMethod}"))
+                                                              .Any(attr => attr.GetType().Name == $"Http{context.Request.HttpMethod}"))
                                                  .FirstOrDefault();
 
             if (method == null) return false;
+
+            string[] strParams;
+            if (context.Request.HttpMethod == "POST")
+            {
+                handlePOST(context, out strParams);
+            }
+            else if (context.Request.HttpMethod == "GET")
+            {
+                handleGET(context, out strParams);
+            }
+            else
+                return false;
+
+            if (strParams is null) return false;
 
             object[] queryParams = method.GetParameters()
                                 .Select((p, i) => Convert.ChangeType(strParams[i], p.ParameterType))
                                 .ToArray();
 
+
+            // разделить код
             var ret = method.Invoke(Activator.CreateInstance(controller), queryParams);
 
             response.ContentType = "Application/json";
@@ -170,8 +183,58 @@ namespace HTTPResponse
             output.Write(buffer, 0, buffer.Length);
 
             output.Close();
-            _httpContext.Response.Close();
             return true;
+        }
+        private static void handleGET(HttpListenerContext context, out string[] strParams)
+        {
+            if (context.Request.Url.Segments.Length < 2)
+            {
+                strParams = null;
+                return;
+            }
+            string controllerName = context.Request.Url.Segments[1].Replace("/", "");
+
+            strParams = context.Request.Url
+                                    .Segments
+                                    .Skip(2)
+                                    .Select(s => s.Replace("/", ""))
+                                    .ToArray();
+        }
+        private static void handlePOST(HttpListenerContext context, out string[] strParams)
+        {
+            var body = GetPOSTBody(context.Request);
+
+            if (body is null) 
+            {
+                strParams = null;
+                return;
+            }
+            // takes values from string
+            var valuesOfPost = body.Split('&');
+            for (int i = 0; i < valuesOfPost.Length; i++)
+            {
+                valuesOfPost[i] = valuesOfPost[i].Split("=")[1];
+            }
+            strParams = valuesOfPost;
+        }
+        /// Takes body from POST request 
+        /// Returns string
+        private static string GetPOSTBody(HttpListenerRequest request)
+        {
+            if (!request.HasEntityBody || request.ContentType == null)
+            {
+                Console.WriteLine("No client data was sent with the request.");
+                Console.WriteLine("Client data content type {0}", request.ContentType);
+                return null;
+            }
+            Stream body = request.InputStream;
+            Encoding encoding = request.ContentEncoding;
+            StreamReader reader = new StreamReader(body, encoding);
+            // Convert the data to a string and display it on the console.
+            string s = reader.ReadToEnd();
+            body.Close();
+            reader.Close();
+            return s; 
         }
     }
 }
