@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using HTTPResponse.Controllers;
 using System.Reflection;
 using System.Data;
 using System.Data.SqlClient;
 using HTTPResponse.Attributes;
+using System.Linq;
 
-namespace HTTPResponse.MyORM
+namespace HTTPResponse.DAO
 {
-    public class ORM
+    internal class UserDAO : DAO<User, int>
     {
         private string connectionString;
-        public ORM(string conStr)
+        public UserDAO(string conStr)
         {
             connectionString = conStr;
         }
@@ -49,38 +49,26 @@ namespace HTTPResponse.MyORM
                 int number = command.ExecuteNonQuery();
             }
         }
-        private T ExecuteScalar<T>(string expr)
-        {
-            T result = default(T);
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand(expr, connection);
-                result = (T)command.ExecuteScalar();
-
-            }
-            return result;
-        }
-        public bool Insert<T>(T obj)
+        public bool Create(User obj)
         {
             try
             {
                 string expr2 = $" VALUES (";
-                string expr1 = $"INSERT INTO [{typeof(T).Name}] (";
-                var propNames = obj.GetType().GetProperties(); 
+                string expr1 = $"INSERT INTO [{typeof(User).Name}] (";
+                var propNames = obj.GetType().GetProperties();
                 for (var i = 0; i < propNames.Length; i++)
                 {
                     if (propNames[i].IsDefined(typeof(Key)))
                         continue;
                     expr1 += propNames[i].Name + ((i == propNames.Length - 1) ? ")" : ", ");
-                    
+
                     string valueStr = Convert.ToString(propNames[i].GetValue(obj));
                     if (propNames[i].GetValue(obj) is DateTime || propNames[i].GetValue(obj) is String)
                         valueStr = "'" + valueStr + "'";
                     expr2 += valueStr + ((i == propNames.Length - 1) ? ")" : ", ");
                 }
-                string expr = expr1 + expr2; 
-                ExecuteNonQuery<T>(expr);
+                string expr = expr1 + expr2;
+                ExecuteNonQuery<User>(expr);
                 return true;
             }
             catch (SqlException e)
@@ -89,29 +77,27 @@ namespace HTTPResponse.MyORM
                 return false;
             }
         }
-        public List<T> Select<T>()
-        {
-            string expr;
-            expr = $"select * from [{ typeof(T).Name }]";
-            return ExecuteReader<T>(expr);
-        }
-        public bool Delete<T>(T obj)
+        public List<User> GetAll()
         {
             try
             {
                 string expr;
-                expr = $"DELETE FROM [{typeof(T).Name}] WHERE ";
-                var propNames = obj.GetType().GetProperties();
-                for (int i = 0; i < propNames.Length; i++)
-                {
-                    var value = Convert.ToString( propNames[i].GetValue(obj) );
-                    if (value is DateTime || value is String)
-                        value = "'" + value + "'";
-                    expr += Convert.ToString(propNames[i].Name) + "=" + value
-                         + ((i == propNames.Length - 1) ? "" : " AND ");
-                    /// Или через первичные ключи удалять
-                }
-                ExecuteNonQuery<T>(expr);
+                expr = $"select * from [{ typeof(User).Name }]";
+                return ExecuteReader<User>(expr);
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+        public bool Delete(int id)
+        {
+            try
+            {
+                string expr;
+                expr = $"DELETE FROM [User] WHERE user_id = { id }";
+                ExecuteNonQuery<User>(expr);
                 return true;
             }
             catch (SqlException e)
@@ -120,7 +106,7 @@ namespace HTTPResponse.MyORM
                 return false;
             }
         }
-        public bool Update<T>(T obj)
+        public User Update(User obj)
         {
             try
             {
@@ -128,7 +114,7 @@ namespace HTTPResponse.MyORM
                 var propNamesPK = propNames.Where(p => p.IsDefined(typeof(Key))).ToList();
                 var propNamesNonPK = propNames.Except(propNamesPK).ToList();
                 string expr;
-                expr = $"UPDATE {typeof(T).Name} SET";
+                expr = $"UPDATE {typeof(User).Name} SET";
                 for (var i = 0; i < propNamesNonPK.Count(); i++)
                 {
                     var value = Convert.ToString(propNamesNonPK[i].GetValue(obj));
@@ -144,13 +130,19 @@ namespace HTTPResponse.MyORM
                         value = "'" + value + "'" + ((i == propNamesPK.Count() - 1) ? " " : " , ");
                     expr += propNamesNonPK[i].Name + "=" + value;
                 }
-                return true;
+                ExecuteNonQuery<User>(expr);
+                return obj;
             }
             catch (SqlException e)
             {
                 Console.WriteLine(e);
-                return false;
+                return null;
             }
+        }
+        public User GetEntityById(int id)
+        {
+            string expr = $"SELECT * FROM [ User ] WHERE user_id = { id }";
+            return ExecuteReader<User>(expr).FirstOrDefault();
         }
     }
 }
