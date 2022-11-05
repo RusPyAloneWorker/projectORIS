@@ -3,31 +3,40 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using HTTPResponse.Attributes;
-using HTTPResponse.DBReader;
+using HTTPResponse.MyORM;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace HTTPResponse.Controllers
 {
     [HttpController("users")]
     internal class Users
-    {
-        [HttpGET("get user")]
-        public User GetUser (int id)
+    {  
+        private static ORM orm = new ORM(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProjectORISDB;Integrated Security=True");
+        [HttpGET("get_user")]
+        public User GetUserById (int id)
         {
-            var dataTable = DBReaderClass.GetData<User>("User");
-            var users = DatatableToListConverter.ConvertDataTable<User>(dataTable);
+            var users = orm.Select<User>();
             return users.FirstOrDefault(t => t.user_id == id);
         }
-        [HttpPOST("make user")]
-        public void MakeUser(int id, string name)
+        [HttpGET("get_users")]
+        public List<User> GetUsers()
         {
-            string sqlExp = $"INSERT INTO [User] (name, surname, password) VALUES ('{name}', 'Anonimous', '{id}')";
-            DBReaderClass.PostData<User>("User", sqlExp);
+            List<User> result = new List<User>();
+            result = orm.Select<User>();
+            return result;
+        }
+        [HttpPOST("save_user")]
+        public void SaveUser(int id, string name)
+        {
+            //string sqlExp = $"INSERT INTO [User] (name, surname, password) VALUES ('{name}', 'Anonimous', '{id}')";
+            orm.Insert<User>(new User(id, name));
+            //orm.ExecuteNonQuery<User>(sqlExp);
         }
     }
-    [HttpController("user")]
     internal class User
     {
+        [Key]
         public int user_id { get; private set; }
         public string name { get; private set; }
         public string surname { get; private set; }
@@ -38,6 +47,7 @@ namespace HTTPResponse.Controllers
             user_id = id;
             this.name = name;
             this.surname = surname;
+            password = "1111";
         }
         public User(int id, string name, string surname, string password)
         {

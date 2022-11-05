@@ -146,13 +146,16 @@ namespace HTTPResponse
             if (controller == null) return false;
 
             var test = typeof(HttpController).Name;
-            var method = controller.GetMethods().Where(t => t.GetCustomAttributes(true)
-                                                              .Any(attr => attr.GetType().Name == $"Http{context.Request.HttpMethod}"))
-                                                 .FirstOrDefault();
+            var methods = controller.GetMethods().Where(t => t.GetCustomAttributes(true)
+                                                              .Any(attr => attr.GetType().Name == $"Http{context.Request.HttpMethod}"));
 
-            if (method == null) return false;
+
+            if (methods == null) return false;
 
             string[] strParams;
+
+            
+
             if (context.Request.HttpMethod == "POST")
             {
                 handlePOST(context, out strParams);
@@ -165,6 +168,10 @@ namespace HTTPResponse
                 return false;
 
             if (strParams is null) return false;
+
+            var method = methods.Where(m => m.GetParameters().Length == strParams.Length).FirstOrDefault();
+
+            if (method is null) return false;
 
             object[] queryParams = method.GetParameters()
                                 .Select((p, i) => Convert.ChangeType(strParams[i], p.ParameterType))
