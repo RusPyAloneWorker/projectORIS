@@ -61,7 +61,7 @@ namespace HTTPResponse.MyORM
             }
             return result;
         }
-        public bool Insert<T>(T obj)
+        internal bool Insert<T>(T obj)
         {
             try
             {
@@ -89,13 +89,13 @@ namespace HTTPResponse.MyORM
                 return false;
             }
         }
-        public List<T> Select<T>()
+        internal List<T> Select<T>()
         {
             string expr;
             expr = $"select * from [{ typeof(T).Name }]";
             return ExecuteReader<T>(expr);
         }
-        public bool Delete<T>(T obj)
+        internal bool Delete<T>(T obj)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace HTTPResponse.MyORM
                 return false;
             }
         }
-        public bool Update<T>(T obj)
+        internal bool Update<T>(T obj)
         {
             try
             {
@@ -144,6 +144,7 @@ namespace HTTPResponse.MyORM
                         value = "'" + value + "'" + ((i == propNamesPK.Count() - 1) ? " " : " , ");
                     expr += propNamesNonPK[i].Name + "=" + value;
                 }
+                ExecuteNonQuery<T>(expr);
                 return true;
             }
             catch (SqlException e)
