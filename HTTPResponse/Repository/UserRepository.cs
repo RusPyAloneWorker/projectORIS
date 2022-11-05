@@ -10,14 +10,14 @@ using System.Reflection;
 
 namespace HTTPResponse.Repository
 {
-    public class UserRepository : IRepository<User>
+    internal class UserRepository : IRepository<User>
     {
         private string connectionString;
         public UserRepository(string con)
         {
             connectionString = con;
         }
-        internal void Insert(User entity)
+        public void Insert(User entity)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace HTTPResponse.Repository
                 Console.WriteLine(e);
             }
         }
-        internal void Update(User entity)
+        public void Update(User entity)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace HTTPResponse.Repository
                 Console.WriteLine(e);
             }
         }
-        internal void Delete(User entity)
+        public void Delete(User entity)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace HTTPResponse.Repository
                 Console.WriteLine(e);
             }
         }
-        internal User FindById(int id)
+        public User FindById(int id)
         {
             string expr;
             expr = $"select * from [{ typeof(User).Name }] where user_id = {id}";
@@ -137,7 +137,7 @@ namespace HTTPResponse.Repository
             }
             return result.FirstOrDefault();
         }
-        internal List<User> FindAll()
+        public List<User> FindAll()
         {
             string expr;
             expr = $"select * from [{ typeof(User).Name }]";

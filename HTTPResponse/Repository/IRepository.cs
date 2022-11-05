@@ -7,7 +7,7 @@ namespace HTTPResponse.Repository
     public interface IRepository <TEntity>
     {
         TEntity FindById(int id);
-        IEnumerable FindAll();
+        List<TEntity> FindAll();
         void Insert(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);

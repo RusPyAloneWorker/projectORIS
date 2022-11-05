@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using HTTPResponse.Attributes;
-using HTTPResponse.MyORM;
+using HTTPResponse.Repository;
 using System.Data.SqlClient;
 using System.IO;
 
@@ -12,25 +12,25 @@ namespace HTTPResponse.Controllers
     [HttpController("users")]
     internal class Users
     {  
-        private static ORM orm = new ORM(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProjectORISDB;Integrated Security=True");
+        private static UserRepository ur = new UserRepository(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProjectORISDB;Integrated Security=True");
         [HttpGET("get_user")]
         public User GetUserById (int id)
         {
-            var users = orm.Select<User>();
-            return users.FirstOrDefault(t => t.user_id == id);
+            var users = ur.FindById(id);
+            return users;
         }
         [HttpGET("get_users")]
         public List<User> GetUsers()
         {
             List<User> result = new List<User>();
-            result = orm.Select<User>();
+            result = ur.FindAll();
             return result;
         }
         [HttpPOST("save_user")]
         public void SaveUser(int id, string name)
         {
             //string sqlExp = $"INSERT INTO [User] (name, surname, password) VALUES ('{name}', 'Anonimous', '{id}')";
-            orm.Insert<User>(new User(id, name));
+            ur.Insert(new User(id, name));
             //orm.ExecuteNonQuery<User>(sqlExp);
         }
     }
@@ -44,10 +44,9 @@ namespace HTTPResponse.Controllers
         public User() { }
         public User(int id, string name = "Аноним", string surname = "Анонимыч")
         {
-            user_id = id;
             this.name = name;
             this.surname = surname;
-            password = "1111";
+            password = Convert.ToString(id);
         }
         public User(int id, string name, string surname, string password)
         {
