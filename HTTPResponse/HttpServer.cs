@@ -85,13 +85,12 @@ namespace HTTPResponse
                 byte[] buffer;
 
                 if (Directory.Exists(path))
-
                 {
-                    buffer = FileFinder.GetFile(context.Request.RawUrl.Replace("%20", " "), "index.html", _path);
+                    var url = context.Request.RawUrl;
+                    buffer = FileFinder.GetFile(( url.CompareTo("/") == 0 ? "/index.html" : url.Replace("%20", " ") ), _path);
 
                     response.Headers.Set("Content-Type", "text/css");
                     response.Headers.Add("Content-Type", "text/html");
-
 
                     if (buffer == null)
                     {
@@ -137,7 +136,12 @@ namespace HTTPResponse
             // объект ответа
             HttpListenerResponse response = context.Response;
 
-            string controllerName = context.Request.Url.Segments[1].Replace("/", "");
+            var segmentsTemp = context.Request.Url.Segments;
+
+            if (segmentsTemp.Length < 2)
+                return false;
+
+            string controllerName = segmentsTemp[1].Replace("/", "");
 
             var assembly = Assembly.GetExecutingAssembly();
 

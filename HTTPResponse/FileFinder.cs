@@ -7,7 +7,7 @@ namespace HTTPResponse
 {
     public class FileFinder
     {
-        public static byte[] GetFile(string rawPath, string fileName, string path)
+        public static byte[] GetFile(string rawPath, string path)
         {
             byte[] result = null;
             string fullPath = path + rawPath;
