@@ -7,9 +7,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using HTTPResponse.Controllers;
 using HTTPResponse.Attributes;
-
 namespace HTTPResponse
 {
     public class HttpServer : IDisposable
@@ -79,39 +77,44 @@ namespace HTTPResponse
         }
         private void StaticFiles(HttpListenerContext context)
         {
-                HttpListenerRequest request = context.Request;
-                HttpListenerResponse response = context.Response;
-                var path = Directory.GetCurrentDirectory();
-                byte[] buffer;
+            HttpListenerRequest request = context.Request;
+            HttpListenerResponse response = context.Response;
+            var path = Directory.GetCurrentDirectory();
+            byte[] buffer;
 
-                if (Directory.Exists(path))
+            if (Directory.Exists(path))
+            {
+                var url = context.Request.RawUrl;
+
+                buffer = FileFinder.GetFileBytes((url.CompareTo("/") == 0 ? "/index.html" : url.Replace("%20", " ")), _path);
+                //HTMLGeneratorClass.HTMLGenerator.GetHTML(strings);
+                // strings бывает null
+                //buffer = Encoding.UTF8.GetBytes(strings);
+                
+
+                response.Headers.Set("Content-Type", "text/css");
+                response.Headers.Add("Content-Type", "text/html");
+
+                if (buffer == null)
                 {
-                    var url = context.Request.RawUrl;
-                    buffer = FileFinder.GetFile(( url.CompareTo("/") == 0 ? "/index.html" : url.Replace("%20", " ") ), _path);
-
-                    response.Headers.Set("Content-Type", "text/css");
-                    response.Headers.Add("Content-Type", "text/html");
-
-                    if (buffer == null)
-                    {
-                        response.Headers.Set("Content-Type", "text/plain");
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
-                        string err = "404 - Not Found";
-                        buffer = Encoding.UTF8.GetBytes(err);
-                    }
-                }
-                else
-                {
-
-                    string err = $"{path} is not found";
+                    response.Headers.Set("Content-Type", "text/plain");
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    string err = "404 - Not Found";
                     buffer = Encoding.UTF8.GetBytes(err);
-
                 }
+            }
+            else
+            {
 
-                output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-                output.Close();
-                context.Response.Close();
+                string err = $"{path} is not found";
+                buffer = Encoding.UTF8.GetBytes(err);
+
+            }
+
+            output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+            output.Close();
+            context.Response.Close();
         }
         public void Stop()
         {
@@ -145,7 +148,9 @@ namespace HTTPResponse
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var controller = assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(HttpController))).FirstOrDefault(c => c.Name.ToLower() == controllerName.ToLower());
+            var controller = assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(HttpController))).FirstOrDefault(
+                c => c.Name.Replace("Controller", "").ToLower() == controllerName.ToLower()
+                );
 
             if (controller == null) return false;
 
@@ -183,12 +188,15 @@ namespace HTTPResponse
 
 
             // разделить код
-            var ret = method.Invoke(Activator.CreateInstance(controller), queryParams);
+            var instance = Activator.CreateInstance(controller);
+            dynamic ret = method.Invoke(instance, queryParams); //передать ref response 
+            
 
-            response.ContentType = "Application/json";
-
-            byte[] buffer = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ret));
+            byte[] buffer = ret.Item1;
+            response.Headers = ret.Item2;
             response.ContentLength64 = buffer.Length;
+            // Делегировать к контроллерам
+
 
             Stream output = response.OutputStream;
             output.Write(buffer, 0, buffer.Length);

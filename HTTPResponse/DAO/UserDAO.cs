@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using HTTPResponse.Attributes;
 using System.Linq;
+using HTTPResponse.Models.UserModel;
 
 namespace HTTPResponse.DAO
 {

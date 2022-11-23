@@ -7,6 +7,7 @@ using HTTPResponse.Attributes;
 using System.Linq;
 using HTTPResponse.Controllers;
 using System.Reflection;
+using HTTPResponse.Models.UserModel;
 
 namespace HTTPResponse.Repository
 {

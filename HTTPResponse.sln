@@ -4,6 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTTPResponse", "HTTPResponse\HTTPResponse.csproj", "{51CBBD2F-1AE3-4E8D-97C4-BAD5A6DF043A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A57E4050-6E3D-4C22-B26C-2F2CB49AC74E} = {A57E4050-6E3D-4C22-B26C-2F2CB49AC74E}
+		{48660BD9-08D1-4CA2-97C7-5E1770F1F1F1} = {48660BD9-08D1-4CA2-97C7-5E1770F1F1F1}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTMLGenerator", "..\HTMLGenerator\HTMLGenerator\HTMLGenerator.csproj", "{A57E4050-6E3D-4C22-B26C-2F2CB49AC74E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTMLGeneratorLibrary", "..\HTMLGeneratorLibrary\HTMLGeneratorLibrary\HTMLGeneratorLibrary.csproj", "{48660BD9-08D1-4CA2-97C7-5E1770F1F1F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,14 @@ Global
 		{51CBBD2F-1AE3-4E8D-97C4-BAD5A6DF043A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51CBBD2F-1AE3-4E8D-97C4-BAD5A6DF043A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51CBBD2F-1AE3-4E8D-97C4-BAD5A6DF043A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57E4050-6E3D-4C22-B26C-2F2CB49AC74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57E4050-6E3D-4C22-B26C-2F2CB49AC74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57E4050-6E3D-4C22-B26C-2F2CB49AC74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57E4050-6E3D-4C22-B26C-2F2CB49AC74E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48660BD9-08D1-4CA2-97C7-5E1770F1F1F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48660BD9-08D1-4CA2-97C7-5E1770F1F1F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48660BD9-08D1-4CA2-97C7-5E1770F1F1F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48660BD9-08D1-4CA2-97C7-5E1770F1F1F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

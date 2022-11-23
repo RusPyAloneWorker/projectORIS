@@ -3,12 +3,8 @@
     "",
     "\\HTTPResponse",
     "\\HTTPResponse\\Attributes",
-    "\\HTTPResponse\\bin\\Debug",
-    "\\HTTPResponse\\bin\\Debug\\netcoreapp3.1",
-    "\\HTTPResponse\\bin\\Debug\\netcoreapp3.1\\site",
-    "\\HTTPResponse\\bin\\Debug\\netcoreapp3.1\\site\\js",
     "\\HTTPResponse\\Controllers"
   ],
-  "SelectedNode": "\\HTTPResponse\\Controllers\\Users.cs",
+  "SelectedNode": "\\HTTPResponse.sln",
   "PreviewInSolutionExplorer": false
 }
