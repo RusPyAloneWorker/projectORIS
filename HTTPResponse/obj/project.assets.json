@@ -654,29 +654,6 @@
         "runtime": {
           "lib/netcoreapp2.1/_._": {}
         }
-      },
-      "HTMLGenerator/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "HTMLGeneratorLibrary": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/HTMLGenerator.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/HTMLGenerator.dll": {}
-        }
-      },
-      "HTMLGeneratorLibrary/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "compile": {
-          "bin/placeholder/HTMLGeneratorLibrary.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/HTMLGeneratorLibrary.dll": {}
-        }
       }
     }
   },
@@ -2500,21 +2477,10 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "HTMLGenerator/1.0.0": {
-      "type": "project",
-      "path": "../../HTMLGenerator/HTMLGenerator/HTMLGenerator.csproj",
-      "msbuildProject": "../../HTMLGenerator/HTMLGenerator/HTMLGenerator.csproj"
-    },
-    "HTMLGeneratorLibrary/1.0.0": {
-      "type": "project",
-      "path": "../../HTMLGeneratorLibrary/HTMLGeneratorLibrary/HTMLGeneratorLibrary.csproj",
-      "msbuildProject": "../../HTMLGeneratorLibrary/HTMLGeneratorLibrary/HTMLGeneratorLibrary.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "HTMLGenerator >= 1.0.0",
       "Microsoft.Data.SqlClient >= 5.0.1",
       "RazorEngine >= 3.10.0",
       "System.Configuration.ConfigurationManager >= 7.0.0",
@@ -2555,11 +2521,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "C:\\Users\\Lenovo\\Source\\Repos\\HTMLGenerator\\HTMLGenerator\\HTMLGenerator.csproj": {
-              "projectPath": "C:\\Users\\Lenovo\\Source\\Repos\\HTMLGenerator\\HTMLGenerator\\HTMLGenerator.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
