@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+//using System.Text;
 using System.Linq;
 using HTTPResponse.Attributes;
 using HTTPResponse.Repository;
@@ -9,6 +9,8 @@ using System.IO;
 using System.Net;
 using HTTPResponse.Models.UserModel;
 using HTTPResponse.Context;
+using RazorEngine;
+
 
 
 namespace HTTPResponse.Controllers
@@ -17,6 +19,7 @@ namespace HTTPResponse.Controllers
     internal class UsersController
     {
         private static UserRepository ur = new UserRepository(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProjectORISDB;Integrated Security=True");
+ 
 
         public UsersController() { }
 
@@ -33,12 +36,13 @@ namespace HTTPResponse.Controllers
             List<Context<User>> list = new List<Context<User>>();
             list.Add(context);
 
+
             string stringForResponse = "<b>{{ User.name }}</b>";
 
             var ins = new HTMLGeneratorClass.HTMLGenerator();
             stringForResponse = ins.GetHTML(stringForResponse, list);
 
-            byte[] buffer = Encoding.UTF8.GetBytes(stringForResponse);
+            byte[] buffer = Encoding..UTF8.GetBytes(stringForResponse);
             return (buffer, headers);
         }
 
@@ -61,6 +65,9 @@ namespace HTTPResponse.Controllers
             string stringForResponse = "<h3>{{ for user in Users }}";
             stringForResponse += "<p><b>{{ user.name }}</b></p>";
             stringForResponse += "{{ endfor }}</h3>";
+
+
+        
 
             var ins = new HTMLGeneratorClass.HTMLGenerator();
             stringForResponse = ins.GetHTML(stringForResponse, list);

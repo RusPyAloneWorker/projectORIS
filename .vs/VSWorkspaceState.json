@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\HTTPResponse",
-    "\\HTTPResponse\\Attributes",
-    "\\HTTPResponse\\Controllers"
+    "\\HTTPResponse\\Attributes"
   ],
-  "SelectedNode": "\\HTTPResponse.sln",
+  "SelectedNode": "\\HTTPResponse\\HTTPResponse.csproj",
   "PreviewInSolutionExplorer": false
 }
