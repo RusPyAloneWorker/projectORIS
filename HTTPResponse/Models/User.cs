@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HTTPResponse.Attributes;
+using HTTPResponse.Repository;
 
 namespace HTTPResponse.Models.UserModel
 {
-    internal class User
+    internal class User : UserRepository
     {
         [Key]
         public int user_id { get; private set; }
@@ -23,7 +24,7 @@ namespace HTTPResponse.Models.UserModel
         }
         public User(int id, string name, string surname, string password)
         {
-            user_id = id;
+            this.user_id = id;
             this.name = name;
             this.surname = surname;
             this.password = password;

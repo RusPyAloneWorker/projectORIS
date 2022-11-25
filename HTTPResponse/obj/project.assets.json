@@ -259,6 +259,15 @@
           }
         }
       },
+      "RazorEngine/3.10.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/RazorEngine.dll": {}
+        },
+        "runtime": {
+          "lib/net45/RazorEngine.dll": {}
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -644,29 +653,6 @@
         },
         "runtime": {
           "lib/netcoreapp2.1/_._": {}
-        }
-      },
-      "HTMLGenerator/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "HTMLGeneratorLibrary": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/HTMLGenerator.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/HTMLGenerator.dll": {}
-        }
-      },
-      "HTMLGeneratorLibrary/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "compile": {
-          "bin/placeholder/HTMLGeneratorLibrary.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/HTMLGeneratorLibrary.dll": {}
         }
       }
     }
@@ -1148,6 +1134,22 @@
         "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "RazorEngine/3.10.0": {
+      "sha512": "xWjGSjhMTM+Qzh3kabsRXR7kpCZQALbYGGYrOPc7wf6IBeDee4OVuO/LRTgWpgIFA8W/widTfszLBm0MfVHRGg==",
+      "type": "package",
+      "path": "razorengine/3.10.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "lib/net40/RazorEngine.dll",
+        "lib/net40/RazorEngine.xml",
+        "lib/net45/RazorEngine.dll",
+        "lib/net45/RazorEngine.xml",
+        "razorengine.3.10.0.nupkg.sha512",
+        "razorengine.nuspec"
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
@@ -2475,22 +2477,12 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "HTMLGenerator/1.0.0": {
-      "type": "project",
-      "path": "../../HTMLGenerator/HTMLGenerator/HTMLGenerator.csproj",
-      "msbuildProject": "../../HTMLGenerator/HTMLGenerator/HTMLGenerator.csproj"
-    },
-    "HTMLGeneratorLibrary/1.0.0": {
-      "type": "project",
-      "path": "../../HTMLGeneratorLibrary/HTMLGeneratorLibrary/HTMLGeneratorLibrary.csproj",
-      "msbuildProject": "../../HTMLGeneratorLibrary/HTMLGeneratorLibrary/HTMLGeneratorLibrary.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "HTMLGenerator >= 1.0.0",
       "Microsoft.Data.SqlClient >= 5.0.1",
+      "RazorEngine >= 3.10.0",
       "System.Configuration.ConfigurationManager >= 7.0.0",
       "System.Data.SqlClient >= 4.8.4"
     ]
@@ -2529,11 +2521,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "C:\\Users\\Lenovo\\Source\\Repos\\HTMLGenerator\\HTMLGenerator\\HTMLGenerator.csproj": {
-              "projectPath": "C:\\Users\\Lenovo\\Source\\Repos\\HTMLGenerator\\HTMLGenerator\\HTMLGenerator.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -2549,6 +2537,10 @@
           "Microsoft.Data.SqlClient": {
             "target": "Package",
             "version": "[5.0.1, )"
+          },
+          "RazorEngine": {
+            "target": "Package",
+            "version": "[3.10.0, )"
           },
           "System.Configuration.ConfigurationManager": {
             "target": "Package",
@@ -2577,5 +2569,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'RazorEngine 3.10.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
+      "libraryId": "RazorEngine",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
 }
