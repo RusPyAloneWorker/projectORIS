@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
@@ -10,13 +8,16 @@ using System.Linq;
 using HTTPResponse.Controllers;
 using System.Reflection;
 using HTTPResponse.Models.UserModel;
-using HTTPResponse;
 
 namespace HTTPResponse.Repository
 {
     internal class UserRepository : IRepository<User>
     {
-        private string connectionString = JsonSerializer.Deserialize<ServerSettings>(File.ReadAllText(Path.GetFullPath("Config.json"))).SqlConnection;
+        private string connectionString;
+        public UserRepository(string con)
+        {
+            connectionString = con;
+        }
         public void Insert(User entity)
         {
             try
