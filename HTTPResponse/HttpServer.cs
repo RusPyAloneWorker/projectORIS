@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Threading;
 using System.Net;
 using System.IO;
 using System.Text;
 using System.Text.Json;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HTTPResponse.Attributes;
+
 namespace HTTPResponse
 {
     public class HttpServer : IDisposable
@@ -148,112 +147,39 @@ namespace HTTPResponse
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var controller = assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(HttpController))).FirstOrDefault(
-                c => c.Name.Replace("Controller", "").ToLower() == controllerName.ToLower()
-                );
+            var controller = assembly.GetTypes()
+                .Where(
+                    t => Attribute.IsDefined(t, typeof(HttpController)) 
+                    && ((HttpController) Attribute.GetCustomAttribute(t,typeof(HttpController))).ControllerName == controllerName
+                ).FirstOrDefault();
 
             if (controller == null) return false;
 
-            var test = typeof(HttpController).Name;
-            var methods = controller.GetMethods().Where(t => t.GetCustomAttributes(true)
-                                                              .Any(attr => attr.GetType().Name == $"Http{context.Request.HttpMethod}"));
+            /// Перебор всех методов с аттрибутом http___
+            //var test = typeof(HttpController).Name;
+            //var methods = controller.GetMethods()
+            //    .Where(t => t.GetCustomAttributes(true)
+            //        .Any(attr => attr.GetType().Name == $"Http{context.Request.HttpMethod}"));
+
+            var attribute = $"Http{context.Request.HttpMethod}"; 
+
+            var method = controller.GetMethods()
+                .Where(t => t.GetCustomAttributes(true)
+                    .Any(attr => attr.GetType().Name == attribute && ((IHttpMethod)attr).MethodURI == segmentsTemp[2].Replace("/", "") ))
+                .FirstOrDefault();
 
 
-            if (methods == null) return false;
-
-            string[] strParams;
-
-            
-
-            if (context.Request.HttpMethod == "POST")
-            {
-                handlePOST(context, out strParams);
-            }
-            else if (context.Request.HttpMethod == "GET")
-            {
-                handleGET(context, out strParams);
-            }
-            else
-                return false;
-
-            if (strParams is null) return false;
-
-            var method = methods.Where(m => m.GetParameters().Length == strParams.Length).FirstOrDefault();
-
-            if (method is null) return false;
-
-            object[] queryParams = method.GetParameters()
-                                .Select((p, i) => Convert.ChangeType(strParams[i], p.ParameterType))
-                                .ToArray();
-
+            if (method == null) return false;
 
             // разделить код
             var instance = Activator.CreateInstance(controller);
-            dynamic ret = method.Invoke(instance, queryParams); //передать ref response 
-            
+            dynamic ret = method.Invoke(instance, new object[] { context }); //передать ref response 
 
-            byte[] buffer = ret.Item1;
-            response.Headers = ret.Item2;
-            response.ContentLength64 = buffer.Length;
-            // Делегировать к контроллерам
-
-
-            Stream output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
+            Stream output = context.Response.OutputStream;
 
             output.Close();
             return true;
         }
-        private static void handleGET(HttpListenerContext context, out string[] strParams)
-        {
-            if (context.Request.Url.Segments.Length < 2)
-            {
-                strParams = null;
-                return;
-            }
-            string controllerName = context.Request.Url.Segments[1].Replace("/", "");
-
-            strParams = context.Request.Url
-                                    .Segments
-                                    .Skip(2)
-                                    .Select(s => s.Replace("/", ""))
-                                    .ToArray();
-        }
-        private static void handlePOST(HttpListenerContext context, out string[] strParams)
-        {
-            var body = GetPOSTBody(context.Request);
-
-            if (body is null) 
-            {
-                strParams = null;
-                return;
-            }
-            // takes values from string
-            var valuesOfPost = body.Split('&');
-            for (int i = 0; i < valuesOfPost.Length; i++)
-            {
-                valuesOfPost[i] = valuesOfPost[i].Split("=")[1];
-            }
-            strParams = valuesOfPost;
-        }
-        /// Takes body from POST request 
-        /// Returns string
-        private static string GetPOSTBody(HttpListenerRequest request)
-        {
-            if (!request.HasEntityBody || request.ContentType == null)
-            {
-                Console.WriteLine("No client data was sent with the request.");
-                Console.WriteLine("Client data content type {0}", request.ContentType);
-                return null;
-            }
-            Stream body = request.InputStream;
-            Encoding encoding = request.ContentEncoding;
-            StreamReader reader = new StreamReader(body, encoding);
-            // Convert the data to a string and display it on the console.
-            string s = reader.ReadToEnd();
-            body.Close();
-            reader.Close();
-            return s; 
-        }
+  
     }
 }

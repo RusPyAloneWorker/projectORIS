@@ -1,0 +1,12 @@
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\bin\Debug\net5.0\RazorGenerator.deps.json
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\bin\Debug\net5.0\RazorGenerator.dll
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\bin\Debug\net5.0\ref\RazorGenerator.dll
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\bin\Debug\net5.0\RazorGenerator.pdb
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.csproj.AssemblyReference.cache
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.AssemblyInfoInputs.cache
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.AssemblyInfo.cs
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.dll
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\ref\RazorGenerator.dll
+C:\Users\Lenovo\Source\Repos\projectORIS\RazorGenerator\obj\Debug\net5.0\RazorGenerator.pdb

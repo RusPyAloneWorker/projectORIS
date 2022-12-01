@@ -4,9 +4,9 @@ using System.Text;
 
 namespace HTTPResponse.Attributes
 {
-    internal class HttpGET : Attribute
+    public class HttpGET : Attribute, IHttpMethod
     {
-        public string MethodURI;
+        public string MethodURI { get; set; }
         public HttpGET(string uri)
         {
             MethodURI = uri;

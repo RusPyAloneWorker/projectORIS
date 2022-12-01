@@ -14,7 +14,7 @@ using HTTPResponse;
 
 namespace HTTPResponse.Repository
 {
-    internal class UserRepository : IRepository<User>
+    public class UserRepository : IRepository<User>
     {
         private string connectionString = JsonSerializer.Deserialize<ServerSettings>(File.ReadAllText(Path.GetFullPath("Config.json"))).SqlConnection;
         public void Insert(User entity)
@@ -161,6 +161,32 @@ namespace HTTPResponse.Repository
                 connection.Close();
             }
             return result;
+        }
+        public User FindByEmailAndPassword(string email, string password)
+        {
+            string expr;
+            expr = $@"select * from [{ typeof(User).Name }] 
+                where email = {email} and password = {password}";
+            List<User> result = new List<User>();
+            Type t = typeof(User);
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(expr, connection);
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    User obj = (User)Activator.CreateInstance(t);
+                    t.GetProperties().ToList().ForEach(p =>
+                    {
+                        p.SetValue(obj, reader[p.Name]);
+                    });
+                    result.Add(obj);
+                }
+                connection.Close();
+            }
+            return result.FirstOrDefault();
         }
     }
 }

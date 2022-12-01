@@ -8,10 +8,11 @@ using HTTPResponse.Repository;
 
 namespace HTTPResponse.Models.UserModel
 {
-    internal class User : UserRepository
+    public class User : UserRepository
     {
         [Key]
         public int user_id { get; private set; }
+        public string email { get; private set; }
         public string name { get; private set; }
         public string surname { get; private set; }
         public string password { get; private set; }
@@ -21,6 +22,13 @@ namespace HTTPResponse.Models.UserModel
             this.name = name;
             this.surname = surname;
             password = Convert.ToString(id);
+        }
+        public User(string email, string password, string name = "Аноним", string surname = "Анонимыч")
+        {
+            this.name = name;
+            this.surname = surname;
+            this.email = email;
+            this.password = password;
         }
         public User(int id, string name, string surname, string password)
         {

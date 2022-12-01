@@ -4,9 +4,9 @@ using System.Text;
 
 namespace HTTPResponse.Attributes
 {
-    internal class HttpPOST: Attribute
+    internal class HttpPOST: Attribute, IHttpMethod
     {
-        public string MethodURI;
+        public string MethodURI { get; set; }
         public HttpPOST(string uri)
         {
             MethodURI = uri;
