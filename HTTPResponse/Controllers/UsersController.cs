@@ -11,7 +11,9 @@ using RazorEngine.Templating;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
+using System.Text;
 using RazorGeneratorLibrary;
+using System.Data.SqlClient;
 
 
 namespace HTTPResponse.Controllers
@@ -23,9 +25,9 @@ namespace HTTPResponse.Controllers
         private static string _path = JsonSerializer.Deserialize<ServerSettings>(File.ReadAllText("Config.json")).Path;
         public UsersController() { }
 
-        [HttpGET("get_user")]
+        [HttpGET("get_user", true)]
         public async Task GetUserById (HttpListenerContext context)
-        {
+        {      
             string[] strParams;
             HttpHandler.HandleGET(context, out strParams);
             int id;
@@ -49,7 +51,7 @@ namespace HTTPResponse.Controllers
             context.Response.OutputStream.Write(buffer, 0, buffer.Length);
         }
 
-        [HttpGET("get_users")]
+        [HttpGET("get_users", true)]
         public async Task GetUsers(HttpListenerContext context)
         {
             List<User> users = new List<User>();
@@ -58,11 +60,10 @@ namespace HTTPResponse.Controllers
             WebHeaderCollection headers = new WebHeaderCollection();
             headers.Set("Content-Type", "text/css");
             headers.Add("Content-Type", "text/html");
+            context.Response.Headers = headers;
 
             string html = FileFinder.GetFileStrings("/html/get_users.html", _path);
             string template = RazorGenerator<List<User>>.Run("get_users", html, users);
-
-            context.Response.Headers = headers;
 
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(template);
             context.Response.ContentLength64 = buffer.Length;
@@ -70,7 +71,7 @@ namespace HTTPResponse.Controllers
         }
 
         [HttpPOST("save_user")]
-        public void SaveUser(HttpListenerContext context) 
+        public async Task SaveUser(HttpListenerContext context) 
         {
             Dictionary<string,string> strParams;
             HttpHandler.HandlePOST(context, out strParams);
@@ -78,17 +79,72 @@ namespace HTTPResponse.Controllers
             if (strParams is null)
                 throw new ArgumentException();
 
-            _user.Insert(new User(email: strParams["email"], password: strParams["password"]));
-            //orm.ExecuteNonQuery<User>(sqlExp);
-            context.Response.Redirect($@"http://localhost:8080/users/get_users/");
+            var user = _user.InsertAndGiveBack(new User(email: strParams["email"], password: strParams["password"]));
+
+            if (user is not null)
+            {
+                CookieManager.AddCookie(context, "SessionId", user.user_id.ToString(), 20d);
+                context.Response.Redirect($@"http://localhost:8080/users/get_user/{user.user_id}");
+            }
+            else
+            {
+                WebHeaderCollection headers = new WebHeaderCollection();
+                headers.Set("Content-Type", "text/css");
+                headers.Add("Content-Type", "text/html");
+                context.Response.Headers = headers;
+
+                string template = "Email or password is already taken.";
+
+                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(template);
+                context.Response.ContentLength64 = buffer.Length;
+                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+            }
         }
         [HttpPOST("sing_up_user")]
-        public bool Login(string email, string password)
+        public async Task Login(HttpListenerContext context)
         {
-            
-            var data = _user.FindByEmailAndPassword(email, password);
-            return data != null;
-            //orm.ExecuteNonQuery<User>(sqlExp);
+            var strParams = new Dictionary<string, string>();
+            HttpHandler.HandlePOST(context, out strParams);
+            if (!(strParams is null || strParams.Count == 0))
+            {
+                var user = _user.FindByEmailAndPassword(email: strParams["email"], password: strParams["password"]);
+
+                if (user is null)
+                {
+                    context.Response.StatusCode = 400;
+
+                    WebHeaderCollection headers = new WebHeaderCollection();
+                    headers.Set("Content-Type", "text/css");
+                    headers.Add("Content-Type", "text/html");
+
+                    context.Response.Headers = headers;
+
+                    string template = "Email or password is incorrect!";
+                    byte[] buffer = System.Text.Encoding.UTF32.GetBytes(template);
+                    context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                }
+                else
+                {
+                    WebHeaderCollection headers = new WebHeaderCollection();
+                    headers.Set("Content-Type", "text/css");
+                    headers.Add("Content-Type", "text/html");
+                    
+                    context.Response.Headers = headers; 
+                    CookieManager.AddCookie(context, "SessionId", user.user_id.ToString(), 20d);
+                    //string template = Uri.UnescapeDataString($@"{user.email}, {user.name}");
+                    //byte[] buffer = System.Text.Encoding.UTF32.GetBytes(template);
+                    //context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                    context.Response.Redirect($@"http://localhost:8080/users/get_user/{user.user_id}");
+                }
+            }
+            else
+            {
+                byte[] buffer = System.Text.Encoding.UTF32.GetBytes("Incorrect input data");
+                context.Response.ContentLength64 = buffer.Length;
+                context.Response.StatusCode = 400;
+                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+            }
         }
+
     }
 }

@@ -17,11 +17,9 @@ namespace HTTPResponse
                 strParams = null;
                 return;
             }
-            string controllerName = context.Request.Url.Segments[2].Replace("/", "");
-
             strParams = context.Request.Url
                                     .Segments
-                                    .Skip(2)
+                                    .Skip(3)
                                     .Select(s => s.Replace("/", ""))
                                     .ToArray();
         }

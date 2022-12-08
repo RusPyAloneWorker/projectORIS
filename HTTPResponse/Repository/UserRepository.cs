@@ -17,10 +17,9 @@ namespace HTTPResponse.Repository
     public class UserRepository : IRepository<User>
     {
         private string connectionString = JsonSerializer.Deserialize<ServerSettings>(File.ReadAllText(Path.GetFullPath("Config.json"))).SqlConnection;
-        public void Insert(User entity)
+        public bool Insert(User entity)
         {
-            try
-            {
+            try { 
                 string expr2 = $" VALUES (";
                 string expr1 = $"INSERT INTO [{typeof(User).Name}] (";
                 var propNames = typeof(User).GetProperties();
@@ -42,16 +41,16 @@ namespace HTTPResponse.Repository
                     SqlCommand command = new SqlCommand(expr, connection);
                     int number = command.ExecuteNonQuery();
                 }
+                return true;
             }
             catch (SqlException e)
             {
-                Console.WriteLine(e);
+                return false;
             }
         }
         public void Update(User entity)
         {
-            try
-            {
+
                 var propNames = typeof(User).GetProperties().ToList();
                 var propNamesPK = propNames.Where(p => p.IsDefined(typeof(Key))).ToList();
                 var propNamesNonPK = propNames.Except(propNamesPK).ToList();
@@ -78,11 +77,6 @@ namespace HTTPResponse.Repository
                     SqlCommand command = new SqlCommand(expr, connection);
                     int number = command.ExecuteNonQuery();
                 }
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e);
-            }
         }
         public void Delete(User entity)
         {
@@ -115,7 +109,7 @@ namespace HTTPResponse.Repository
         public User FindById(int id)
         {
             string expr;
-            expr = $"select * from [{ typeof(User).Name }] where user_id = {id}";
+            expr = $"select * from [{ typeof(User).Name }] where [user_id] = {id}";
             List<User> result = new List<User>();
             Type t = typeof(User);
 
@@ -165,8 +159,7 @@ namespace HTTPResponse.Repository
         public User FindByEmailAndPassword(string email, string password)
         {
             string expr;
-            expr = $@"select * from [{ typeof(User).Name }] 
-                where email = {email} and password = {password}";
+            expr = $"select * from [{ typeof(User).Name }] where email = '{email}' AND password = '{password}'";
             List<User> result = new List<User>();
             Type t = typeof(User);
 
@@ -187,6 +180,53 @@ namespace HTTPResponse.Repository
                 connection.Close();
             }
             return result.FirstOrDefault();
+        }
+        public User InsertAndGiveBack(User entity)
+        {
+            try
+            {
+                string expr2 = $" VALUES (";
+                string expr1 = $"INSERT INTO [{typeof(User).Name}] (";
+                var propNames = typeof(User).GetProperties();
+                for (var i = 0; i < propNames.Length; i++)
+                {
+                    if (propNames[i].IsDefined(typeof(Key)))
+                        continue;
+                    expr1 += propNames[i].Name + ((i == propNames.Length - 1) ? ")" : ", ");
+
+                    string valueStr = Convert.ToString(propNames[i].GetValue(entity));
+                    if (propNames[i].GetValue(entity) is DateTime || propNames[i].GetValue(entity) is String)
+                        valueStr = "'" + valueStr + "'";
+                    expr2 += valueStr + ((i == propNames.Length - 1) ? ")" : ", ");
+                }
+                string inserted = @" OUTPUT Inserted.user_id, Inserted.email, Inserted.name, Inserted.surname, Inserted.password ";
+                string expr = expr1 + inserted + expr2;
+                User value = null;
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(expr, connection);
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        User obj = (User)Activator.CreateInstance(typeof(User));
+                        typeof(User).GetProperties().ToList().ForEach(p =>
+                        {
+                            Console.WriteLine(p.Name);
+                            Console.WriteLine(reader[p.Name]);
+                            p.SetValue(obj, reader[p.Name]);
+                        });
+                        value = obj;
+
+                    }
+                    connection.Close();
+                }
+                return value;
+            }
+            catch (SqlException e)
+            {
+                return null;
+            }
         }
     }
 }

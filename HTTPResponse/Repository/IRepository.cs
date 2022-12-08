@@ -8,7 +8,7 @@ namespace HTTPResponse.Repository
     {
         TEntity FindById(int id);
         List<TEntity> FindAll();
-        void Insert(TEntity entity);
+        bool Insert(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);
     }

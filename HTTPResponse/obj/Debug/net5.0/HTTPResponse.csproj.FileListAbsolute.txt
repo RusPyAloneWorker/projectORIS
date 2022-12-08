@@ -3,7 +3,6 @@ C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\HTTPRespo
 C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\HTTPResponse.runtimeconfig.json
 C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\HTTPResponse.runtimeconfig.dev.json
 C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\HTTPResponse.dll
-C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\ref\HTTPResponse.dll
 C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\HTTPResponse.pdb
 C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\Azure.Core.dll
 C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\Azure.Identity.dll
@@ -366,3 +365,5 @@ C:\Users\Lenovo\Source\Repos\projectORIS\HTTPResponse\bin\Debug\net5.0\refs\Syst
 C:\Users\Lenovo\Source\Repos\projectORIS\HTTPResponse\bin\Debug\net5.0\refs\WindowsBase.dll
 C:\Users\Lenovo\Source\Repos\projectORIS\HTTPResponse\bin\Debug\net5.0\RazorGenerator.dll
 C:\Users\Lenovo\Source\Repos\projectORIS\HTTPResponse\bin\Debug\net5.0\RazorGenerator.pdb
+C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\bin\Debug\net5.0\System.Web.Razor.dll
+C:\Users\Lenovo\source\repos\projectORIS\HTTPResponse\obj\Debug\net5.0\refint\HTTPResponse.dll

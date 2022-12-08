@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Linq;
 using System.Reflection;
 using HTTPResponse.Attributes;
+using System.Threading.Tasks;
 
 namespace HTTPResponse
 {
@@ -85,7 +86,7 @@ namespace HTTPResponse
             {
                 var url = context.Request.RawUrl;
 
-                buffer = FileFinder.GetFileBytes((url.CompareTo("/") == 0 ? "/index.html" : url.Replace("%20", " ")), _path);
+                buffer = FileFinder.GetFileBytes(url.Replace("%20", " "), _path);
                 //HTMLGeneratorClass.HTMLGenerator.GetHTML(strings);
                 // strings бывает null
                 //buffer = Encoding.UTF8.GetBytes(strings);
@@ -140,8 +141,24 @@ namespace HTTPResponse
 
             var segmentsTemp = context.Request.Url.Segments;
 
-            if (segmentsTemp.Length < 2)
-                return false;
+
+            /// При http://localhost:8080/ или http://localhost:8080/sign_up
+            /// Меняю segmentsTemp так, чтобы вызывался HomePageController
+            if (segmentsTemp.Length < 3)
+            {
+                if (segmentsTemp.Length == 1)
+                {
+                    string[] segmentsTemp1 = new string[] { "/", "HomePage/", "show_homepage" };
+                    segmentsTemp = segmentsTemp1;
+                }
+                else if (segmentsTemp.Length == 2 && segmentsTemp[1].Replace("/", "") == "sign_up")
+                {
+                    string[] segmentsTemp1 = new string[] { "/", "HomePage/", "sign_up" };
+                    segmentsTemp = segmentsTemp1;
+                }
+                else 
+                    return false;
+            }
 
             string controllerName = segmentsTemp[1].Replace("/", "");
 
@@ -155,12 +172,6 @@ namespace HTTPResponse
 
             if (controller == null) return false;
 
-            /// Перебор всех методов с аттрибутом http___
-            //var test = typeof(HttpController).Name;
-            //var methods = controller.GetMethods()
-            //    .Where(t => t.GetCustomAttributes(true)
-            //        .Any(attr => attr.GetType().Name == $"Http{context.Request.HttpMethod}"));
-
             var attribute = $"Http{context.Request.HttpMethod}"; 
 
             var method = controller.GetMethods()
@@ -168,12 +179,27 @@ namespace HTTPResponse
                     .Any(attr => attr.GetType().Name == attribute && ((IHttpMethod)attr).MethodURI == segmentsTemp[2].Replace("/", "") ))
                 .FirstOrDefault();
 
-
             if (method == null) return false;
 
-            // разделить код
+            var tempAttr = method.GetCustomAttributes().Where(t=>t is IAuthenticationChecker).FirstOrDefault();
+
+            if (tempAttr is not null && ((IAuthenticationChecker)tempAttr).AuthCheck == true)
+            {
+                if (!CookieManager.IsAuthorized(context))
+                {
+                    var headers = new WebHeaderCollection();
+                    headers.Set("Content-Type", "text/css");
+                    headers.Add("Content-Type", "text/html");
+                    context.Response.Headers = headers;
+
+                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes("Access denyed!!");
+                    context.Response.ContentLength64 = buffer.Length;
+                    context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                }
+            }
+
             var instance = Activator.CreateInstance(controller);
-            dynamic ret = method.Invoke(instance, new object[] { context }); //передать ref response 
+            dynamic ret =  method.Invoke(instance, new object[] { context });
 
             Stream output = context.Response.OutputStream;
 

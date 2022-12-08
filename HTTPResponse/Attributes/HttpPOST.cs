@@ -4,12 +4,14 @@ using System.Text;
 
 namespace HTTPResponse.Attributes
 {
-    internal class HttpPOST: Attribute, IHttpMethod
+    internal class HttpPOST: Attribute, IHttpMethod, IAuthenticationChecker
     {
+        public bool AuthCheck { get; set; }
         public string MethodURI { get; set; }
-        public HttpPOST(string uri)
+        public HttpPOST(string uri, bool authCheck = false)
         {
-            MethodURI = uri;
+            this.MethodURI = uri;
+            this.AuthCheck = authCheck;
         }
     }
 }
